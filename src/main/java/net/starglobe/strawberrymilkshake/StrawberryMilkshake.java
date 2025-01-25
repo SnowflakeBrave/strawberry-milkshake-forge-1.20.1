@@ -1,4 +1,4 @@
-package net.snowflakebrave.strawberrymilkshake;
+package net.starglobe.strawberrymilkshake;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -26,56 +26,51 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.starglobe.strawberrymilkshake.item.ModCreativeModeTabs;
+import net.starglobe.strawberrymilkshake.item.ModItems;
+
 import org.slf4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(StrawberryMilkshake.MOD_ID)
-public class StrawberryMilkshake
-{
-    // Define mod id in a common place for everything to reference
+public class StrawberryMilkshake {
+
     public static final String MOD_ID = "strawberrymilkshake";
-    // Directly reference a slf4j logger
+
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public StrawberryMilkshake(FMLJavaModLoadingContext context)
-    {
+    public StrawberryMilkshake(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
 
-        // Register the commonSetup method for modloading
+        ModCreativeModeTabs.register(modEventBus);
+        
+        ModItems.register(modEventBus);
+
         modEventBus.addListener(this::commonSetup);
 
-        // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
-        // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event)
-    {
+    private void commonSetup(final FMLCommonSetupEvent event) {
 
     }
 
-    // Add the example block item to the building blocks tab
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
-    {
-
+    private void addCreative(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            event.accept(ModItems.PAINTBRUSH);
+        }
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event)
-    {
+    public void onServerStarting(ServerStartingEvent event) {
 
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
+    public static class ClientModEvents {
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
+        public static void onClientSetup(FMLClientSetupEvent event) {
            
         }
     }
